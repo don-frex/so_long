@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 17:47:59 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/07 01:15:22 by asaber           ###   ########.fr       */
+/*   Updated: 2023/04/12 22:25:15 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	check_path(char *str)
 
 int	main(int argc, char **argv)
 {
+	int		j;
+	char	**map;
 	int		fd;
 	int		length;
 	t_coord	*for_p;
@@ -39,13 +41,6 @@ int	main(int argc, char **argv)
 	check_path(argv[1]);
 	fd = open(argv[1], O_RDWR);
 	length = check_length(fd);
-	fd = open(argv[1], O_RDWR);
-	check_map(fd, length);
-	fd = open(argv[1], O_RDWR);
-	check_border(fd, length);
-	fd = open(argv[1], O_RDWR);
-	check_characters(argv[1], fd, length);
-	for_p = search_map('P', argv[1], length);
-	printf("(%d, %d)\n", for_p->x, for_p->y);
-	close(fd);
+	check_map(argv[1], length);
+	if_map_valid(argv[1], length);
 }

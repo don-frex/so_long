@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:12:36 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/05 02:34:40 by asaber           ###   ########.fr       */
+/*   Updated: 2023/04/09 13:13:27 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,12 @@ void	check_border(int fd, int length)
 	close(fd);
 }
 
-void	check_map(int fd, int length)
+void	check_map(char *path, int length)
 {
+	int	fd;
 	int	i;
 
+	fd = open(path, O_RDWR);
 	i = 1;
 	while (i <= length)
 	{
@@ -83,4 +85,6 @@ void	check_map(int fd, int length)
 		i++;
 	}
 	close(fd);
+	check_border(open(path, O_RDWR), length);
+	check_characters(path, length);
 }

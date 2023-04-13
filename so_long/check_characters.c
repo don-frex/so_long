@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 02:16:21 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/05 18:18:51 by asaber           ###   ########.fr       */
+/*   Updated: 2023/04/09 13:19:35 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,13 @@ void	min_condition(int fd, int length)
 	}
 }
 
-void	check_characters(char *path, int fd, int length)
+void	check_characters(char *path, int length)
 {
+	int	fd;
 	int	end;
 	int	length_min;
 
+	fd = open(path, O_RDWR);
 	end = length;
 	length_min = length;
 	while (length)
