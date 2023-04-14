@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 17:58:59 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/13 02:18:05 by asaber           ###   ########.fr       */
+/*   Updated: 2023/04/14 00:01:42 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,29 +40,27 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (0);
 }
 
-void	ft_lstadd_back(t_coord *lst, t_coord *new)
+void	ft_lstadd_back(t_coord **lst, t_coord *new)
 {
-	t_coord	*end;
+	t_coord	*temp;
 
-	end = lst;
-	if (lst == NULL)
-	{
-		printf("\no_o\n");
-		lst = new;
-		return ;
-	}
+	if (*lst == NULL)
+		*lst = new;
 	else
-		while (end->next)
-			end = end->next;
-		end->next = new;
-		new->next = NULL;
+	{
+		temp = *lst;
+		while (temp->next != NULL)
+		{
+			temp = temp->next;
+		}
+		temp->next = new;
+	}
 }
 
 t_coord	*ft_lstnew(int x, int y)
 {
 	t_coord	*begin;
 
-	begin = NULL;
 	begin = (t_coord *) malloc(sizeof(t_coord));
 	if (begin == 0)
 		return (NULL);
@@ -72,12 +70,17 @@ t_coord	*ft_lstnew(int x, int y)
 	return (begin);
 }
 
-void	prnt(t_coord *linked)
+int	t_nodeline(t_coord *stack)
 {
-	printf("\n|||||||||||||");
-	while (linked)
+	int	i;
+
+	i = 0;
+	if (!stack)
+		return (0);
+	while (stack)
 	{
-		printf("\n(x = %d y = %d)", linked->x, linked->y);
-		linked = linked->next;
+		i++;
+		stack = stack->next;
 	}
+	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 17:43:39 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/13 02:02:42 by asaber           ###   ########.fr       */
+/*   Updated: 2023/04/14 01:22:32 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,11 @@ int		map_len(char *path);
 char	**copy_map(char *path, int length);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	if_map_valid(char *path, int length);
-t_coord	*search_new_map(char c, char **map, int length);
+t_coord	*srch_mp(char c, char **map, int length);
 t_coord	*ft_lstnew(int x, int y);
-void	ft_lstadd_back(t_coord *lst, t_coord *new);
+void	ft_lstadd_back(t_coord **lst, t_coord *new);
 void	prnt(t_coord *linked);
+int		t_nodeline(t_coord *stack);
+int		check_char(char c, char **map, int length);
 
 #endif

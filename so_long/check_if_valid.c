@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 22:04:45 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/13 02:30:27 by asaber           ###   ########.fr       */
+/*   Updated: 2023/04/14 02:07:21 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 char	**copy_map(char *path, int length)
 {
 	char	**map;
-	char	*line;
 	int		fd;
-	int		i;
 	int		j;
 
 	map = (char **)malloc(length + 1);
@@ -25,25 +23,11 @@ char	**copy_map(char *path, int length)
 	j = 0;
 	while (j < length)
 	{
-		i = 0;
-		line = get_next_line(fd);
-		map[j] = (char *) malloc(ft_strlen(line) + 2);
-		while (line[i])
-		{
-			map[j][i] = line[i];
-			i++;
-		}
-		map[j][i] = '\0';
-		free(line);
+		map[j] = get_next_line(fd);
 		j++;
 	}
 	close(fd);
 	return (map);
-}
-
-void	print_in_map(char **map, char c, int x, int y)
-{
-	map[y][x] = c;
 }
 
 t_coord	*poop_stack(t_coord **stack)
@@ -58,71 +42,62 @@ t_coord	*poop_stack(t_coord **stack)
 	return (tmp);
 }
 
-int	check_visited(t_coord *point, t_coord *stack)
+void	check_der(t_coord **stack, char **map)
 {
-	while (stack)
+	int	x;
+	int	y;
+	t_coord	*position;
+
+	position = poop_stack(stack);
+	if (!check_top(position, map))
 	{
-		if (stack->x == point->x && stack->y == point->y)
-			return (1);
-		stack = stack->next;
+		x = position->x;
+		y = position->y - 1;
+		map[y][x] = 'P';
+		ft_lstadd_back(stack, ft_lstnew(x, y));
 	}
-	return (0);
-}
-
-void	check_direc(char **map, t_coord *posetion, t_coord *to_visit, t_coord *visited)
-{
-	t_coord	*tmp;
-	int		x;
-	int		y;
-
-	if (!check_top(posetion, map))
+	if (!check_right(position, map))
 	{
-		x = posetion->x;
-		y = posetion->y - 1;
-		tmp = ft_lstnew(x, y);
-		if (!check_visited(tmp, visited))
-		{
-			prnt(tmp);
-			to_visit = tmp;
-			printf("x -- %d\n",visited->x);
-		}
-		else
-			printf("visited\n");
+		x = position->x + 1;
+		y = position->y;
+		map[y][x] = 'P';
+		ft_lstadd_back(stack, ft_lstnew(x, y));
 	}
-	else
-		printf("closed\n");
-}
-
-void	find_exit(char **map, t_coord **visited, t_coord **to_visit)
-{
-	t_coord	*tmp;
-
-	while (*to_visit != NULL)
+	if (!check_left(position, map))
 	{
-		tmp = poop_stack(to_visit);
-		if (check_visited(tmp, *visited))
-		{
-			write(1, "already visited\n", 16);
-			continue ;
-		}
-		ft_lstadd_back(*visited, tmp);
-		check_direc(map, tmp, *to_visit, *visited);
+		x = position->x - 1;
+		y = position->y;
+		map[y][x] = 'P';
+		ft_lstadd_back(stack, ft_lstnew(x, y));
+	}
+	if (!check_low(position, map))
+	{
+		x = position->x;
+		y = position->y + 1;
+		map[y][x] = 'P';
+		ft_lstadd_back(stack, ft_lstnew(x, y));
 	}
 }
 
 void	if_map_valid(char *path, int length)
 {
 	char	**map;
-	int		i;
-	t_coord	*p;
-	t_coord	*visited;
-	t_coord	*to_visit;
+	t_coord	*visit;
+	int	j;
 
-	visited = NULL;
-	to_visit = NULL;
 	map = copy_map(path, length);
-	p = search_new_map('P', map, length);
-	to_visit = p;
-	p->next = NULL;
-	find_exit(map, &visited, &to_visit);
+	visit = srch_mp('P', map, length);
+	while (t_nodeline(visit))
+		check_der(&visit, map);
+	j = 0;
+	while (j < length)
+	{
+		printf("%s", map[j]);
+		j++;
+	}
+	if (check_char('E', map, length) || check_char('C', map, length))
+	{
+		printf("\npath invalid yohohoho!!!\n");
+		exit(1);
+	}
 }

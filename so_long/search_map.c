@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 22:05:56 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/11 06:50:25 by asaber           ###   ########.fr       */
+/*   Updated: 2023/04/14 02:07:06 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,27 @@ int	search_coord(int x, int y, char **map)
 	return (1);
 }
 
-t_coord	*search_new_map(char c, char **map, int length)
+int	check_char(char c, char **map, int length)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	while (j < length)
+	{
+		i = 0;
+		while (map[j][i])
+		{
+			if (map[j][i] == c)
+				return (1);
+			i++;
+		}
+		j++;
+	}
+	return (0);
+}
+
+t_coord	*srch_mp(char c, char **map, int length)
 {
 	t_coord	*coord;
 	int		i;
@@ -36,6 +56,7 @@ t_coord	*search_new_map(char c, char **map, int length)
 				coord = malloc(sizeof(t_coord));
 				coord->x = i;
 				coord->y = j;
+				coord->next = NULL;
 			}
 			i++;
 		}
