@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 02:16:21 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/09 13:19:35 by asaber           ###   ########.fr       */
+/*   Updated: 2023/04/16 05:46:56 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	min_condition(int fd, int length)
 		}
 		length--;
 	}
-	if (e > 1 || c == 0 || p > 1)
+	if (e > 1 || c == 0 || p > 1 || p == 0 || e == 0)
 	{
 		write(2, "INVALID MAP dup\n", 16);
 		exit(1);
