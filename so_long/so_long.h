@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 17:43:39 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/16 08:46:26 by asaber           ###   ########.fr       */
+/*   Updated: 2023/04/16 21:58:21 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,15 @@ typedef struct so_long
 	struct so_long	*next;
 }	t_coord;
 
+typedef struct gameinfo
+{
+	char	**map;
+	int		player_x;
+	int		player_y;
+	int		exit_y;
+	int		exit_x;
+}	t_game;
+
 typedef struct mlx
 {
 	int		width;
@@ -40,6 +49,8 @@ typedef struct mlx
 	
 		
 }	t_mlx;
+
+t_game	gameinfo;
 
 # define buffer 500000
 

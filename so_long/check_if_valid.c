@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 22:04:45 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/16 09:47:29 by asaber           ###   ########.fr       */
+/*   Updated: 2023/04/16 22:22:06 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,9 @@ void	if_map_valid(char *path, int length)
 
 	map = copy_map(path);
 	j = 0;
-	
 	visit = srch_mp('P', map, length);
 	while (t_nodeline(visit))
 		check_der(&visit, map);
-	
 	if (check_char('E', map, length) || check_char('C', map, length))
 	{
 		printf("\npath invalid yohohoho!!!\n");
