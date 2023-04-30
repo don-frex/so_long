@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 22:05:56 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/15 17:23:27 by asaber           ###   ########.fr       */
+/*   Updated: 2023/04/29 09:43:37 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,42 @@ int	search_coord(int x, int y, char **map)
 	if (map[y][x] == '0' || map[y][x] == 'E' || map[y][x] == 'C')
 		return (0);
 	return (1);
+}
+
+int	search_coordmap(int x, int y, char c, char **map)
+{
+	if (map[y][x] == '0' || map[y][x] == c|| map[y][x] == 'P')
+		return (0);
+	return (1);
+}
+
+int	ischar(int x, int y, char c, char **map)
+{
+	if(map[y][x] == c)
+		return (1);
+	return(0);
+}
+
+int	count_char(char c, char **map)
+{
+	int count;
+	int	i;
+	int	j;
+
+	count = 0;
+	j = 0;
+	while (map[j])
+	{
+		i = 0;
+		while (map[j][i])
+		{
+			if (map[j][i] == c)
+				count++;
+			i++;
+		}
+		j++;
+	}
+	return (count);
 }
 
 int	check_char(char c, char **map, int length)

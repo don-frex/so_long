@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 21:51:48 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/16 22:30:47 by asaber           ###   ########.fr       */
+/*   Updated: 2023/04/30 03:03:39 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,43 @@ void	drawing(t_mlx *mlx)
 	}
 }
 
-int	key_hook(int keycode, t_mlx *vars)
+void	not_finsish(t_mlx *mlx, int	keycode)
 {
-	if (keycode == 2)
+	if (!ischar(mlx->p->x + 1, mlx->p->y, 'E', gameinfo.map) && (keycode == 2 || keycode == 124))
+		mov_hor(mlx, 1);
+	else if (!ischar(mlx->p->x, mlx->p->y - 1, 'E', gameinfo.map) && (keycode == 13 || keycode == 126))
+		mov_ver(mlx, -1);
+	else if (!ischar(mlx->p->x, mlx->p->y + 1, 'E', gameinfo.map) && (keycode == 1 || keycode == 125))
+		mov_ver(mlx, 1);
+	else if (!ischar(mlx->p->x - 1, mlx->p->y, 'E', gameinfo.map) &&  (keycode == 0 || keycode == 123))
+		mov_hor(mlx, -1);
+}
+
+void	finish(t_mlx *mlx, int keycode)
+{
+	if (keycode == 2 || keycode == 124)
+		mov_hor(mlx, 1);
+	else if (keycode == 13 || keycode == 126)
+		mov_ver(mlx, -1);
+	else if (keycode == 1 || keycode == 125)
+		mov_ver(mlx, 1);
+	else if (keycode == 0 || keycode == 123)
+		mov_hor(mlx, -1);
+	if (ischar(mlx->p->x, mlx->p->y, 'E', gameinfo.map))
+		exit(0);
+}
+
+int	key_hook(int keycode, t_mlx *mlx)
+{
+	if(ischar(mlx->p->x, mlx->p->y, 'C', gameinfo.map))
 	{
-		mlx_put_image_to_window(vars->mlx, vars->mlx_window, vars->player, 3 * 64, 5 * 32);
+		mlx->ncoins--;
+		gameinfo.map[mlx->p->y][mlx->p->x] = '0';
 	}
+	if (!mlx->ncoins)
+		finish(mlx, keycode);
+	else
+		not_finsish(mlx, keycode);
 	return (0);
 }
 
@@ -61,19 +92,21 @@ void	display(char *path, int lenght)
 {
 	t_mlx 	*mlx;
 
-	gameinfo.map = copy_map(path);
+	(void) *path;
 	mlx = malloc(sizeof(t_mlx));
+	mlx->p = srch_mp('P', gameinfo.map, lenght);
+	mlx->ncoins = count_char('C', gameinfo.map);
 	mlx->width = 32 * ft_strlen(gameinfo.map[0]);
     mlx->height = 32 * lenght;
     mlx->mlx = mlx_init();
-    mlx->mlx_window = mlx_new_window(mlx->mlx, mlx->width, mlx->height, "My Window");
+    mlx->mlx_window = mlx_new_window(mlx->mlx, mlx->width, mlx->height, "S0_l0ng");
     mlx->base = mlx_xpm_file_to_image(mlx->mlx, "src/ard.xpm", &mlx->width, &mlx->height);
 	mlx->border = mlx_xpm_file_to_image(mlx->mlx, "src/wall.xpm", &mlx->width, &mlx->height);
 	mlx->coins = mlx_xpm_file_to_image(mlx->mlx, "src/coin.xpm", &mlx->width, &mlx->height);
 	mlx->exit = mlx_xpm_file_to_image(mlx->mlx, "src/exit.xpm", &mlx->width, &mlx->height);
 	mlx->player = mlx_xpm_file_to_image(mlx->mlx, "src/jooseph.xpm", &mlx->width, &mlx->height);
-	mlx_key_hook(mlx->mlx_window, key_hook, &mlx);
     drawing(mlx);
+	mlx_key_hook(mlx->mlx_window, key_hook, mlx);
     mlx_loop(mlx->mlx);
 
 }

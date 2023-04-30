@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 17:43:39 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/16 21:58:21 by asaber           ###   ########.fr       */
+/*   Updated: 2023/04/29 12:12:30 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ typedef struct gameinfo
 
 typedef struct mlx
 {
+	t_coord	*p;
+	int		ncoins;
 	int		width;
 	int		height;
 	void	*mlx;
@@ -63,7 +65,10 @@ void	check_border(int fd, int length);
 void	min_condition(int fd, int length);
 void	check_characters(char *path, int length);
 t_coord	*search_map(char c, char *path, int length);
+int		count_char(char c, char **map);
 int		search_coord(int x, int y, char **map);
+int	search_coordmap(int x, int y, char c, char **map);
+int	ischar(int x, int y, char c, char **map);
 int		check_top(t_coord *coord, char **map);
 int		check_low(t_coord *coord, char **map);
 int		check_right(t_coord *coord, char **map);
@@ -80,5 +85,7 @@ int		t_nodeline(t_coord *stack);
 int		check_char(char c, char **map, int length);
 char	**ft_split(char const *s, char c);
 void	display(char *path, int length);
+void	mov_hor(t_mlx *mlx, int i);
+void	mov_ver(t_mlx *mlx, int j);
 
 #endif
