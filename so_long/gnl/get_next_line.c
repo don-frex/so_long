@@ -6,11 +6,12 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:33:08 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/15 17:41:37 by asaber           ###   ########.fr       */
+/*   Updated: 2023/05/01 16:41:31 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "../so_long.h"
 
 char	*ft_strdup(char *str)
 {

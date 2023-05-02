@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:12:36 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/09 13:13:27 by asaber           ###   ########.fr       */
+/*   Updated: 2023/05/01 17:05:45 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,17 @@
 
 int	check_length(int fd)
 {
-	int	i;
+	char	*line;
+	int		i;
 
 	i = 0;
-	while (get_next_line(fd))
+	line = get_next_line(fd);
+	while (line)
+	{
 		i++;
+		free(line);
+		line = get_next_line(fd);
+	}
 	close(fd);
 	return (i);
 }
@@ -35,10 +41,12 @@ void	check_is_one(char *line)
 		if (line[i] != '1')
 		{
 			write(2, "INVALID MAP\n", 12);
+			free(line);
 			exit(1);
 		}
 		i++;
 	}
+	free(line);
 }
 
 void	check_edges(char *line)
@@ -49,22 +57,29 @@ void	check_edges(char *line)
 	if (line[0] != '1' || line[end] != '1')
 	{
 		write(2, "INVALID MAP\n", 12);
+		free(line);
 		exit(1);
 	}
+	free(line);
 }
 
 void	check_border(int fd, int length)
 {
-	int	size;
+	char	*line;
+	int		size;
 
-	size = ft_strlen(get_next_line(fd));
+	line = get_next_line(fd);
+	size = ft_strlen(line);
+	free(line);
 	while (length-- > 1)
 	{
-		if (ft_strlen(get_next_line(fd)) != size)
+		line = get_next_line(fd);
+		if (ft_strlen(line) != size)
 		{
 			write(2, "INVALID MAP BOR\n", 16);
 			exit(1);
 		}
+		free(line);
 	}
 	close(fd);
 }

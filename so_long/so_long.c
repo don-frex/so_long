@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 17:47:59 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/29 22:59:09 by asaber           ###   ########.fr       */
+/*   Updated: 2023/05/02 19:14:57 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ void	check_path(char *str)
 	}
 }
 
+int	__exit(void)
+{
+	exit(0);
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	int		fd;
@@ -45,6 +51,6 @@ int	main(int argc, char **argv)
 	length = check_length(fd);
 	check_map(argv[1], length);
 	if_map_valid(argv[1], length);
-	gameinfo.map = copy_map(argv[1]);
+	game.map = copy_map(argv[1]);
 	display(argv[1], length);
 }

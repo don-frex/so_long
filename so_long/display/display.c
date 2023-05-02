@@ -6,57 +6,51 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 21:51:48 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/30 03:03:39 by asaber           ###   ########.fr       */
+/*   Updated: 2023/05/02 19:14:57 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-void	drawing(t_mlx *mlx)
+void	drawing(t_mlx *m)
 {
 	int	j;
 	int	i;
 
 	j = 0;
-	while (gameinfo.map[j])
+	while (game.map[j])
 	{
 		i = 0;
-		while (gameinfo.map[j][i])
+		while (game.map[j][i])
 		{
-			if (gameinfo.map[j][i] == '0')
-				mlx_put_image_to_window(mlx->mlx, mlx->mlx_window, mlx->base, i * 32, j * 32);
-			else if (gameinfo.map[j][i] == '1')
-				mlx_put_image_to_window(mlx->mlx, mlx->mlx_window, mlx->border, i * 32, j * 32);
-			else if (gameinfo.map[j][i] == 'C')
-			{
-				mlx_put_image_to_window(mlx->mlx, mlx->mlx_window, mlx->base, i * 32, j * 32);
-				mlx_put_image_to_window(mlx->mlx, mlx->mlx_window, mlx->coins, i * 32, j * 32);
-			}
-			else if (gameinfo.map[j][i] == 'P')
-			{
-				mlx_put_image_to_window(mlx->mlx, mlx->mlx_window, mlx->base, i * 32, j * 32);
-				mlx_put_image_to_window(mlx->mlx, mlx->mlx_window, mlx->player, i * 32, j * 32);
-			}
-			else if (gameinfo.map[j][i] == 'E')
-			{
-				mlx_put_image_to_window(mlx->mlx, mlx->mlx_window, mlx->base, i * 32, j * 32);
-				mlx_put_image_to_window(mlx->mlx, mlx->mlx_window, mlx->exit, i * 32, j * 32);
-			}
+			if (game.map[j][i] == '1')
+				mlx_put_image_to_window(m->mlx, m->win, m->bo, i * 32, j * 32);
+			else if (game.map[j][i] == 'C')
+				mlx_put_image_to_window(m->mlx, m->win, m->cn, i * 32, j * 32);
+			else if (game.map[j][i] == 'P')
+				mlx_put_image_to_window(m->mlx, m->win,
+					m->player, i * 32, j * 32);
+			else if (game.map[j][i] == 'E')
+				mlx_put_image_to_window(m->mlx, m->win,
+					m->exit, i * 32, j * 32);
 			i++;
 		}
 		j++;
 	}
 }
 
-void	not_finsish(t_mlx *mlx, int	keycode)
+void	not_finsish(t_mlx *mlx, int	n)
 {
-	if (!ischar(mlx->p->x + 1, mlx->p->y, 'E', gameinfo.map) && (keycode == 2 || keycode == 124))
+	if (!ischar(mlx->p->x + 1, mlx->p->y, 'E', game.map) && (n == 2 || n == 124))
 		mov_hor(mlx, 1);
-	else if (!ischar(mlx->p->x, mlx->p->y - 1, 'E', gameinfo.map) && (keycode == 13 || keycode == 126))
+	else if (!ischar(mlx->p->x, mlx->p->y - 1,
+			'E', game.map) && (n == 13 || n == 126))
 		mov_ver(mlx, -1);
-	else if (!ischar(mlx->p->x, mlx->p->y + 1, 'E', gameinfo.map) && (keycode == 1 || keycode == 125))
+	else if (!ischar(mlx->p->x, mlx->p->y + 1,
+			'E', game.map) && (n == 1 || n == 125))
 		mov_ver(mlx, 1);
-	else if (!ischar(mlx->p->x - 1, mlx->p->y, 'E', gameinfo.map) &&  (keycode == 0 || keycode == 123))
+	else if (!ischar(mlx->p->x - 1, mlx->p->y, 'E', game.map)
+		&& (n == 0 || n == 123))
 		mov_hor(mlx, -1);
 }
 
@@ -70,18 +64,22 @@ void	finish(t_mlx *mlx, int keycode)
 		mov_ver(mlx, 1);
 	else if (keycode == 0 || keycode == 123)
 		mov_hor(mlx, -1);
-	if (ischar(mlx->p->x, mlx->p->y, 'E', gameinfo.map))
+	if (ischar(mlx->p->x, mlx->p->y, 'E', game.map))
+	{
+		free(mlx);
 		exit(0);
+	}
 }
 
 int	key_hook(int keycode, t_mlx *mlx)
 {
-	if(ischar(mlx->p->x, mlx->p->y, 'C', gameinfo.map))
+	if (ischar(mlx->p->x, mlx->p->y, 'C', game.map))
 	{
-		mlx->ncoins--;
-		gameinfo.map[mlx->p->y][mlx->p->x] = '0';
+		mlx->cs--;
+		game.map[mlx->p->y][mlx->p->x] = '0';
 	}
-	if (!mlx->ncoins)
+	printf("%d\n", keycode);
+	if (!mlx->cs)
 		finish(mlx, keycode);
 	else
 		not_finsish(mlx, keycode);
@@ -90,23 +88,26 @@ int	key_hook(int keycode, t_mlx *mlx)
 
 void	display(char *path, int lenght)
 {
-	t_mlx 	*mlx;
+	t_mlx	*m;
 
 	(void) *path;
-	mlx = malloc(sizeof(t_mlx));
-	mlx->p = srch_mp('P', gameinfo.map, lenght);
-	mlx->ncoins = count_char('C', gameinfo.map);
-	mlx->width = 32 * ft_strlen(gameinfo.map[0]);
-    mlx->height = 32 * lenght;
-    mlx->mlx = mlx_init();
-    mlx->mlx_window = mlx_new_window(mlx->mlx, mlx->width, mlx->height, "S0_l0ng");
-    mlx->base = mlx_xpm_file_to_image(mlx->mlx, "src/ard.xpm", &mlx->width, &mlx->height);
-	mlx->border = mlx_xpm_file_to_image(mlx->mlx, "src/wall.xpm", &mlx->width, &mlx->height);
-	mlx->coins = mlx_xpm_file_to_image(mlx->mlx, "src/coin.xpm", &mlx->width, &mlx->height);
-	mlx->exit = mlx_xpm_file_to_image(mlx->mlx, "src/exit.xpm", &mlx->width, &mlx->height);
-	mlx->player = mlx_xpm_file_to_image(mlx->mlx, "src/jooseph.xpm", &mlx->width, &mlx->height);
-    drawing(mlx);
-	mlx_key_hook(mlx->mlx_window, key_hook, mlx);
-    mlx_loop(mlx->mlx);
-
+	m = malloc(sizeof(t_mlx));
+	m->p = srch_mp('P', game.map, lenght);
+	m->cs = count_char('C', game.map);
+	m->wi = 32 * ft_strlen(game.map[0]);
+	m->he = 32 * lenght;
+	m->mlx = mlx_init();
+	m->win = mlx_new_window(m->mlx, m->wi, m->he, "S0_l0ng");
+	m->bs = mlx_xpm_file_to_image(m->mlx, "src/ard.xpm", &m->wi, &m->he);
+	m->bo = mlx_xpm_file_to_image(m->mlx, "src/wall.xpm", &m->wi, &m->he);
+	m->cn = mlx_xpm_file_to_image(m->mlx, "src/coin.xpm", &m->wi, &m->he);
+	m->exit = mlx_xpm_file_to_image(m->mlx, "src/exit.xpm", &m->wi, &m->he);
+	m->player = mlx_xpm_file_to_image(m->mlx, "src/pac.xpm", &m->wi, &m->he);
+	m->pt = mlx_xpm_file_to_image(m->mlx, "src/pac_top.xpm", &m->wi, &m->he);
+	m->ple = mlx_xpm_file_to_image(m->mlx, "src/pac_left.xpm", &m->wi, &m->he);
+	m->pl = mlx_xpm_file_to_image(m->mlx, "src/pac_low.xpm", &m->wi, &m->he);
+	drawing(m);
+	mlx_key_hook(m->win, key_hook, m);
+	mlx_hook(m->win, 17, 0, __exit, NULL);
+	mlx_loop(m->mlx);
 }

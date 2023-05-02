@@ -6,7 +6,7 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 17:43:39 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/29 12:12:30 by asaber           ###   ########.fr       */
+/*   Updated: 2023/05/02 19:24:05 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct so_long
 	struct so_long	*next;
 }	t_coord;
 
-typedef struct gameinfo
+typedef struct game
 {
 	char	**map;
 	int		player_x;
@@ -38,23 +38,24 @@ typedef struct gameinfo
 typedef struct mlx
 {
 	t_coord	*p;
-	int		ncoins;
-	int		width;
-	int		height;
+	int		cs;
+	int		wi;
+	int		he;
 	void	*mlx;
-	void	*mlx_window;
-	void	*base;
-	void	*border;
+	void	*win;
+	void	*bs;
+	void	*bo;
 	void	*exit;
 	void	*player;
-	void	*coins;
-	
-		
+	void	*pt;
+	void	*pl;
+	void	*ple;
+	void	*cn;
 }	t_mlx;
 
-t_game	gameinfo;
+static t_game	game;
 
-# define buffer 500000
+# define BUFFER 500000
 
 int		ft_strlen(const char *c);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -67,13 +68,13 @@ void	check_characters(char *path, int length);
 t_coord	*search_map(char c, char *path, int length);
 int		count_char(char c, char **map);
 int		search_coord(int x, int y, char **map);
-int	search_coordmap(int x, int y, char c, char **map);
-int	ischar(int x, int y, char c, char **map);
+int		ischar(int x, int y, char c, char **map);
 int		check_top(t_coord *coord, char **map);
 int		check_low(t_coord *coord, char **map);
 int		check_right(t_coord *coord, char **map);
 int		check_left(t_coord *coord, char **map);
 int		map_len(char *path);
+int		__exit(void);
 char	**copy_map(char *path);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	if_map_valid(char *path, int length);
@@ -87,5 +88,6 @@ char	**ft_split(char const *s, char c);
 void	display(char *path, int length);
 void	mov_hor(t_mlx *mlx, int i);
 void	mov_ver(t_mlx *mlx, int j);
+void	print(t_mlx *m, void *img, int x, int y);
 
 #endif

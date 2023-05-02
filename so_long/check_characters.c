@@ -6,11 +6,17 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 02:16:21 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/16 05:46:56 by asaber           ###   ########.fr       */
+/*   Updated: 2023/05/01 22:18:22 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+void	write_error(char *message, int count)
+{
+	write(2, message, count);
+	exit(1);
+}
 
 void	check_intruder(char *line)
 {
@@ -60,7 +66,7 @@ void	min_condition(int fd, int length)
 	while (length)
 	{
 		if (length == end || length == 1)
-			get_next_line(fd);
+			line = get_next_line(fd);
 		else
 		{
 			line = get_next_line(fd);
@@ -68,20 +74,19 @@ void	min_condition(int fd, int length)
 			c += check_ecp(line, 'C');
 			p += check_ecp(line, 'P');
 		}
+		free(line);
 		length--;
 	}
 	if (e > 1 || c == 0 || p > 1 || p == 0 || e == 0)
-	{
-		write(2, "INVALID MAP dup\n", 16);
-		exit(1);
-	}
+		write_error("INVALID MAP dup\n", 16);
 }
 
 void	check_characters(char *path, int length)
 {
-	int	fd;
-	int	end;
-	int	length_min;
+	int		fd;
+	int		end;
+	int		length_min;
+	char	*line;
 
 	fd = open(path, O_RDWR);
 	end = length;
@@ -89,9 +94,13 @@ void	check_characters(char *path, int length)
 	while (length)
 	{
 		if (length == end || length == 1)
-			get_next_line(fd);
+			line = get_next_line(fd);
 		else
-			check_intruder(get_next_line(fd));
+		{
+			line = get_next_line(fd);
+			check_intruder(line);
+		}
+		free(line);
 		length--;
 	}
 	close(fd);

@@ -6,12 +6,11 @@
 /*   By: asaber <asaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 17:51:18 by asaber            #+#    #+#             */
-/*   Updated: 2023/04/03 19:57:08 by asaber           ###   ########.fr       */
+/*   Updated: 2022/11/23 01:06:45 by asaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "../so_long.h"
 
 int	ft_sln(char *str)
 {
